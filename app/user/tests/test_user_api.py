@@ -5,7 +5,6 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 from rest_framework import status
 
-import pdb
 
 CREATE_USER_URL = reverse( 'user:create' )
 TOKEN_URL = reverse( 'user:token' )
@@ -14,6 +13,7 @@ ME_URL = reverse( 'user:me' )
 
 def create_user( **params ):
     return get_user_model().objects.create_user( **params )
+
 
 class PublicUserAPITests( TestCase ):
     """Test the users API (public)"""
@@ -32,7 +32,7 @@ class PublicUserAPITests( TestCase ):
 
         self.assertEqual( res.status_code, status.HTTP_201_CREATED )
         user = get_user_model().objects.get( **res.data )
-        self.assertTrue( user.check_password( payload[ 'password' ])) 
+        self.assertTrue( user.check_password( payload[ 'password' ]))
         self.assertNotIn( 'password', res.data )
 
     def test_user_exists( self ):
@@ -115,18 +115,19 @@ class PublicUserAPITests( TestCase ):
 
         self.assertEqual( res.status_code, status.HTTP_401_UNAUTHORIZED )
 
+
 class PrivateUserAPITests( TestCase ):
     """Test API requests that require authentication"""
 
     def setUp( self ):
-        self.user = create_user( 
+        self.user = create_user(
             email = 'test@bellcoho.com',
             password = 'pass1234',
             name = 'Steve',
         )
         self.client = APIClient()
         self.client.force_authenticate( user = self.user )
-    
+
     def test_retrieve_profile_success( self ):
         """Test retriving profile for logged in user"""
         res = self.client.get( ME_URL )

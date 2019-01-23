@@ -3,7 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 
-# import pdb
 
 class UserSerializer( serializers.ModelSerializer ):
     """Serializer for the users object"""
@@ -27,6 +26,7 @@ class UserSerializer( serializers.ModelSerializer ):
 
         return user
 
+
 class AuthTokenSerializer( serializers.Serializer ):
     """Serializer for the user authentication object"""
     email = serializers.CharField()
@@ -37,7 +37,7 @@ class AuthTokenSerializer( serializers.Serializer ):
 
     def validate( self, attrs ):
         """Validate and authenticate the user"""
-        email = attrs.get( 'email' )        
+        email = attrs.get( 'email' )
         password = attrs.get( 'password' )
 
         user = authenticate(
@@ -48,6 +48,6 @@ class AuthTokenSerializer( serializers.Serializer ):
         if not user:
             msg = _( 'Unable to authenticate with credentials' )
             raise serializers.ValidationError( msg, code='authentication' )
-        
+
         attrs[ 'user' ] = user
         return attrs
