@@ -8,7 +8,7 @@ from recipe import serializers
 
 
 class RecipeAttrViewSet( viewsets.GenericViewSet,
-                     mixins.ListModelMixin, mixins.CreateModelMixin ):
+                         mixins.ListModelMixin, mixins.CreateModelMixin ):
     authentication_classes = ( TokenAuthentication, )
     permission_classes = ( IsAuthenticated, )
 
